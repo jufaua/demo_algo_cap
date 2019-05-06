@@ -60,7 +60,7 @@
 <div id="sceneController" >
   <button id="backward"><</button>
   <button id="forward">></button>
-  <span id="sceneId">0</span>
+  <span id="sceneId">0/14</span>
 </div>
 <script>
   const emptyGeoJSON = {"type": "FeatureCollection", "features": []};
@@ -3908,7 +3908,7 @@
     }
     j += 1;
     scenes[j]();
-    $('#sceneId').html(j);
+    $('#sceneId').html(`${j}/14`);
     window.cancelAnimationFrame(animation);
   });
 
@@ -3919,7 +3919,7 @@
       }
       j -= 1;
       scenes[j]();
-      $('#sceneId').html(j);
+      $('#sceneId').html(`${j}/14`);
       window.cancelAnimationFrame(animation);
     }
   })
