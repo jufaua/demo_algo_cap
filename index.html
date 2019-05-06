@@ -3604,7 +3604,6 @@
     map.getSource('endStop').setData(emptyGeoJSON);
     map.getSource('bus').setData(emptyGeoJSON);
     map.getSource('fullRoute').setData(routeGeoJSON);
-    map.getSource('intermediateRoute').setData(routeGeoJSON);
     map.getSource('secondIntermediateRoute').setData(emptyGeoJSON);
     map.flyTo({
       center: [-73.4825,45.5276], 
@@ -3614,6 +3613,8 @@
       turf.along(cuttedRoute,turf.length(cuttedRoute)/2).geometry.coordinates,
       "L'arbre des possibilités de l'arrêt de descente est réduit aux arrêts en aval"
     )
+    let startCuttingLineAt = turf.nearestPointOnLine(routeGeoJSON.features[0],startStopGeoJSON.features[0]).properties.location;
+    cuttedRoute = turf.lineSliceAlong(routeGeoJSON.features[0],startCuttingLineAt,turf.length(routeGeoJSON.features[0]));
     map.getSource('intermediateRoute').setData(cuttedRoute);
   }
 
@@ -3624,6 +3625,8 @@
     map.getSource('startStop').setData(startStopGeoJSON);
     map.getSource('endStop').setData(emptyGeoJSON);
     map.getSource('bus').setData(emptyGeoJSON);
+    let startCuttingLineAt = turf.nearestPointOnLine(routeGeoJSON.features[0],startStopGeoJSON.features[0]).properties.location;
+    cuttedRoute = turf.lineSliceAlong(routeGeoJSON.features[0],startCuttingLineAt,turf.length(routeGeoJSON.features[0]));
     map.getSource('intermediateRoute').setData(cuttedRoute);
     map.getSource('fullRoute').setData(routeGeoJSON);
     map.getSource('secondIntermediateRoute').setData(secondRouteGeoJSON);
@@ -3641,10 +3644,11 @@
     if (popup != undefined) {
       popup.remove();
     }
-    map.getSource('startStop').setData(startStopGeoJSON);
     map.getSource('endStop').setData(emptyGeoJSON);
     map.getSource('fullRoute').setData(routeGeoJSON);
     map.getSource('bus').setData(emptyGeoJSON);
+    let startCuttingLineAt = turf.nearestPointOnLine(routeGeoJSON.features[0],startStopGeoJSON.features[0]).properties.location;
+    cuttedRoute = turf.lineSliceAlong(routeGeoJSON.features[0],startCuttingLineAt,turf.length(routeGeoJSON.features[0]));
     map.getSource('intermediateRoute').setData(cuttedRoute);
     map.getSource('secondIntermediateRoute').setData(secondRouteGeoJSON);
     map.flyTo({
@@ -3662,7 +3666,7 @@
     if (popup != undefined) {
       popup.remove();
     }
-    map.getSource('startStop').setData(startStopGeoJSON);
+    map.getSource('startStop').setData(turf.featureCollection([startStopGeoJSON.features[0],secondStartStopGeoJSON.features[0]]));
     map.getSource('endStop').setData(endStopGeoJSON);
     map.getSource('fullRoute').setData(secondRouteGeoJSON);
     map.getSource('bus').setData(emptyGeoJSON);
@@ -3685,7 +3689,7 @@
     if (popup != undefined) {
       popup.remove();
     }
-    map.getSource('startStop').setData(startStopGeoJSON);
+    map.getSource('startStop').setData(turf.featureCollection([startStopGeoJSON.features[0],secondStartStopGeoJSON.features[0]]));
     map.getSource('endStop').setData(endStopGeoJSON);
     map.getSource('fullRoute').setData(secondRouteGeoJSON);
     map.getSource('bus').setData(emptyGeoJSON);
@@ -3713,7 +3717,7 @@
     let startCuttingLineAt = turf.nearestPointOnLine(routeGeoJSON.features[0],startStopGeoJSON.features[0]).properties.location;
     let stopCuttingLineAt = turf.nearestPointOnLine(routeGeoJSON.features[0],endStopGeoJSON.features[0]).properties.location;
     cuttedRoute = turf.lineSliceAlong(routeGeoJSON.features[0],startCuttingLineAt,stopCuttingLineAt);
-    map.getSource('startStop').setData(startStopGeoJSON);
+    map.getSource('startStop').setData(turf.featureCollection([startStopGeoJSON.features[0],secondStartStopGeoJSON.features[0]]));
     map.getSource('endStop').setData(endStopGeoJSON);
     map.getSource('fullRoute').setData(secondRouteGeoJSON);
     map.getSource('bus').setData(emptyGeoJSON);
@@ -3872,7 +3876,7 @@
     map.getSource('secondIntermediateRoute').setData(emptyGeoJSON);
     popup = tempPopup(
       turf.along(cuttedRoute,turf.length(secondRouteGeoJSON)/2).geometry.coordinates,
-      "Le déplacement entier,ses deux segments et les arrêts de montée/descente"
+      "Le déplacement entier, ses deux segments et les arrêts de montée/descente"
     )
   }
 
